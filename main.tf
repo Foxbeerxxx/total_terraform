@@ -84,11 +84,13 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
   }
 
   user {
-    name     = "alexey"
-    password = "Cnews220"
-    permission {
-      database_name = "mydb"
-    }
+  name     = "alexey"
+  password = "Cnews220"
+
+  permission {
+    database_name = "mydb"
+    roles         = ["ALL"]
+   }
   }
 }
 
