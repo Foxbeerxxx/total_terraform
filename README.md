@@ -117,6 +117,7 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
 resource "yandex_container_registry" "registry" {
   name = "simple-registry"
 }
+<<<<<<< HEAD
 
 ```
 
@@ -126,6 +127,11 @@ resource "yandex_container_registry" "registry" {
 
 ![1](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img1.png)`
 
+=======
+
+```
+4. `Заполните здесь этапы выполнения, если требуется ....`
+>>>>>>> 658ee3b242c41136f6054bf6bfeed8692a52188d
 5. `Заполните здесь этапы выполнения, если требуется ....`
 6. 
 
