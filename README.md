@@ -188,14 +188,71 @@ terraform apply
 
 ### Задание 3
 
-`Приведите ответ в свободной форме........`
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+
+1. `Создаю Dockerfile с наполнением`
+```
+# Используем официальный образ NGINX
+FROM nginx:latest
+
+# Документируем порт
+EXPOSE 80
+```
+
+2. `Также создаю каталог html и в нем файл indexс наполнением`
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My NGINX App</title>
+</head>
+<body>
+  <h1>Hello from my custom NGINX container!</h1>
+  <p>This page is served by NGINX inside a Docker container.</p>
+</body>
+</html>
+
+```
+3. `Собираю образ`
+
+```
+docker build -t my-nginx:latest .
+```
+4. `Посмотреть твой Registry ID`
+
+```
+yc container registry list
+```
+5. `Тегирую под Yandex Container Registry`
+```
+docker tag my-nginx:latest cr.yandex/crpne9j6e0oo9k3t7pfb/my-nginx:latest
+```
+
+6. `Логинюсь в Registry`
+
+```
+yc container registry configure-docker
+```
+7. `Заливаю образ`
+
+```
+docker push cr.yandex/crpne9j6e0oo9k3t7pfb/my-nginx:latest
+```
+![3](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img3.png)`
+
+8. `Проверяю`  
+
+```
+docker run --rm -p 8080:80 cr.yandex/crpne9j6e0oo9k3t7pfb/my-nginx:latest
+```
+![4](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img4.png)`
+
+![5](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img5.png)`
+
+
+
 
 ```
 Поле для вставки кода...
