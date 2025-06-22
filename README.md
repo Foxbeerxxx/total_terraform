@@ -252,37 +252,81 @@ docker run --rm -p 8080:80 cr.yandex/crpne9j6e0oo9k3t7pfb/my-nginx:latest
 ![5](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img5.png)`
 
 
-
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота](ссылка на скриншот)`
-
 ### Задание 4
 
-`Приведите ответ в свободной форме........`
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+
+1. `Для задания делаю каталог fastapi-db-appс наполнением из трех вайлов.`
+2. `app.py`
+```
+from fastapi import FastAPI
+import mysql.connector
+import os
+
+app = FastAPI()
+
+db_host = os.getenv("DB_HOST")
+db_user = os.getenv("DB_USER")
+db_pass = os.getenv("DB_PASSWORD")
+db_name = os.getenv("DB_NAME")
+
+@app.get("/")
+def root():
+    conn = mysql.connector.connect(
+        host=db_host, user=db_user, password=db_pass, database=db_name)
+    cur = conn.cursor()
+    cur.execute("SELECT NOW()")
+    now = cur.fetchone()[0]
+    return {"mysql_time": str(now)}
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
+3. `Dockerfile`
+```
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY app.py .
+EXPOSE 80
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+
+```
+4. `requirements.txt`
+
+```
+fastapi
+uvicorn
+mysql-connector-python
+
 ```
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота](ссылка на скриншот)`
+5. ` Сборка и пуш в Registry`
+
+```
+docker build -t fastapi-db-app:latest .
+docker tag fastapi-db-app:latest cr.yandex/crpne9j6e0oo9k3t7pfb/fastapi-db-app:latest
+yc container registry configure-docker
+docker push cr.yandex/crpne9j6e0oo9k3t7pfb/fastapi-db-app:latest
+```
+![8](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img8.png)`
+
+
+6. ` Захожу на ВМ и проверяю`
+```
+ssh ubuntu@51.250.79.88
+
+yc container registry configure-docker
+
+docker run -d -p 80:80 \
+  -e DB_HOST=rc1a-n5m2e1jdhdkdkmfp.mdb.yandexcloud.net \
+  -e DB_USER=alexey \
+  -e DB_PASSWORD=Cnews220 \
+  -e DB_NAME=mydb \
+  cr.yandex/crpne9j6e0oo9k3t7pfb/fastapi-db-app:latest
+
+
+docker ps
+
+```
+
+![7](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img7.png)`

@@ -110,3 +110,7 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
 resource "yandex_container_registry" "registry" {
   name = "simple-registry"
 }
+
+output "mysql_fqdn" {
+  value = yandex_mdb_mysql_cluster.mysql.host[0].fqdn
+}
