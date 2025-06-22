@@ -57,6 +57,18 @@ resource "yandex_compute_instance" "vm" {
 
   metadata = {
     ssh-keys = "ubuntu:${var.public_key}"
+    user-data = <<-EOF
+      #cloud-config
+      package_update: true
+      package_upgrade: true
+      packages:
+        - docker.io
+        - docker-compose
+      runcmd:
+        - systemctl start docker
+        - systemctl enable docker
+        - usermod -aG docker ubuntu
+    EOF
   }
 }
 
@@ -66,7 +78,7 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
   environment = "PRESTABLE"
   network_id  = data.yandex_vpc_subnet.default.network_id
 
-  version     = "8.0"  
+  version     = "8.0"
 
   resources {
     resource_preset_id = "s2.micro"
@@ -84,16 +96,15 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
   }
 
   user {
-  name     = "alexey"
-  password = "Cnews220"
+    name     = "alexey"
+    password = "Cnews220"
 
-  permission {
-    database_name = "mydb"
-    roles         = ["ALL"]
-   }
+    permission {
+      database_name = "mydb"
+      roles         = ["ALL"]
+    }
   }
 }
-
 
 # --- Container Registry ---
 resource "yandex_container_registry" "registry" {

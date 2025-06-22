@@ -117,7 +117,6 @@ resource "yandex_mdb_mysql_cluster" "mysql" {
 resource "yandex_container_registry" "registry" {
   name = "simple-registry"
 }
-<<<<<<< HEAD
 
 ```
 
@@ -127,49 +126,62 @@ resource "yandex_container_registry" "registry" {
 
 ![1](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img1.png)`
 
-=======
-
-```
-4. `Заполните здесь этапы выполнения, если требуется ....`
->>>>>>> 658ee3b242c41136f6054bf6bfeed8692a52188d
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-
-![1](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img1.png)`
-
-
----
 
 ### Задание 2
 
-`Приведите ответ в свободной форме........`
+1. `Дописываю main.tf`
+```
+resource "yandex_compute_instance" "vm" {
+  name        = "simple-vm"
+  platform_id = "standard-v1"
+  zone        = var.zone
 
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+  resources {
+    cores  = 2
+    memory = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = var.image_id
+    }
+  }
+
+  network_interface {
+    subnet_id          = data.yandex_vpc_subnet.default.id
+    nat                = true
+    security_group_ids = [yandex_vpc_security_group.default.id]
+  }
+
+  metadata = {
+    ssh-keys  = "ubuntu:${var.public_key}"
+    user-data = <<-EOF
+      #cloud-config
+      package_update: true
+      package_upgrade: true
+      packages:
+        - docker.io
+        - docker-compose
+      runcmd:
+        - systemctl start docker
+        - systemctl enable docker
+        - usermod -aG docker ubuntu
+    EOF
+  }
+}
 
 ```
-Поле для вставки кода...
-....
-....
-....
-....
-```
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 2](ссылка на скриншот 2)`
+2. `Проверяю работу `
+```
+terraform init
+terraform plan
+terraform apply
+
+```
+3. `Проверяю, что установился Docker и Docker Compose`
+
+![2](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img2.png)`
 
 
 ---
