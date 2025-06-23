@@ -317,6 +317,8 @@ ssh ubuntu@51.250.79.88
 
 yc container registry configure-docker
 
+terraform output mysql_fqdn
+
 docker run -d -p 80:80 \
   -e DB_HOST=rc1a-n5m2e1jdhdkdkmfp.mdb.yandexcloud.net \
   -e DB_USER=alexey \
