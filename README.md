@@ -332,3 +332,18 @@ docker ps
 ```
 
 ![7](https://github.com/Foxbeerxxx/total_terraform/blob/main/img/img7.png)`
+
+7. `Первым делом надо было спрятать на .gitignore все секреты.`
+
+```
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+```
